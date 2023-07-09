@@ -72,6 +72,30 @@ namespace transformSprites {
         get scaledImage(): Image {
             return this._scaledImage;
         }   // get scaledImage()
+
+        /**
+         * Changes the original image associated with the sprite.
+         * @param {Image} - New image associated with the sprite.
+         */
+        set scaledImage(image: Image) {
+            this._scaledImage = scale2x(image);
+        }
+
+        /**
+         * Changes the original image associated with the sprite.
+         * @param {Image} - New image associated with the sprite.
+         */
+        get origImage(): Image {
+            return this._origImage;
+        }
+
+        /**
+         * Changes the original image associated with the sprite.
+         * @param {Image} - New image associated with the sprite.
+         */
+        set origImage(image: Image) {
+            this._origImage = image;
+        }
     }   // class SpriteWithRotation
 
     /**
@@ -192,6 +216,22 @@ namespace transformSprites {
         _spritesWithRotations[sprite.id].rotation = angle;
         sprite.setImage(rotate(_spritesWithRotations[sprite.id], angle));
     }   // rotateSprite()
+
+    /**
+     * Change the current image transformSprites associates with the sprite.
+     */
+    //% blockId=transform_change_image
+    //% block="set image of %sprite(mySprite) to %image"
+    export function changeImage(sprite: Sprite, image: Image): void {
+        if (_spritesWithRotations[sprite.id]) {
+            console.log("Original image is: " + _spritesWithRotations[sprite.id].origImage)
+            console.log("Scaled image is: " + _spritesWithRotations[sprite.id].scaledImage)
+            _spritesWithRotations[sprite.id].origImage = image;
+            _spritesWithRotations[sprite.id].scaledImage = image;
+            console.log("Updated Original image is: " + _spritesWithRotations[sprite.id].origImage)
+            console.log("Updated Scaled image is: " + _spritesWithRotations[sprite.id].scaledImage)
+        }
+    }
 
     /**
      * Rotate a sprite to a specific angle.
