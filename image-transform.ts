@@ -223,13 +223,11 @@ namespace transformSprites {
     //% blockId=transform_change_image
     //% block="set image of %sprite(mySprite) to %image"
     export function changeImage(sprite: Sprite, image: Image): void {
-        if (_spritesWithRotations[sprite.id]) {
-            console.log("Original image is: " + _spritesWithRotations[sprite.id].origImage)
-            console.log("Scaled image is: " + _spritesWithRotations[sprite.id].scaledImage)
-            _spritesWithRotations[sprite.id].origImage = image;
-            _spritesWithRotations[sprite.id].scaledImage = image;
-            console.log("Updated Original image is: " + _spritesWithRotations[sprite.id].origImage)
-            console.log("Updated Scaled image is: " + _spritesWithRotations[sprite.id].scaledImage)
+        let thisSprite = _spritesWithRotations[sprite.id];
+        if (thisSprite) {
+            thisSprite.origImage = image;
+            thisSprite.scaledImage = image;
+            rotateSprite(sprite, thisSprite.rotation);
         }
     }
 
