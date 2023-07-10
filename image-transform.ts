@@ -20,6 +20,7 @@ namespace transformSprites {
         private _currRotation: number;
         private _origImage: Image;
         private _scaledImage: Image;
+        private _animation: SpriteWithRotationAnimation = null;
 
         /**
          * Initialize a sprite with rotation state.
@@ -74,7 +75,7 @@ namespace transformSprites {
         }   // get scaledImage()
 
         /**
-         * Changes the original image associated with the sprite.
+         * Changes the scaled image associated with the sprite.
          * @param {Image} - New image associated with the sprite.
          */
         set scaledImage(image: Image) {
@@ -82,8 +83,8 @@ namespace transformSprites {
         }
 
         /**
-         * Changes the original image associated with the sprite.
-         * @param {Image} - New image associated with the sprite.
+         * Returns the original image associated with the sprite.
+         * @return {Image} - An image representing that attached to the sprite.
          */
         get origImage(): Image {
             return this._origImage;
@@ -96,7 +97,73 @@ namespace transformSprites {
         set origImage(image: Image) {
             this._origImage = image;
         }
+
+        /**
+         * Returns the SpriteWithRotationAnimation object on the sprite.
+         * @return {SpriteWithRotationAnimation} - Object controlling animation running on the sprite.
+         */
+        get animation(): SpriteWithRotationAnimation {
+            return this._animation;
+        }
+
+        /**
+         * Changes the original image associated with the sprite.
+         * @param {Image} - New image associated with the sprite.
+         */
+        set animation(spriteWithRotationAnimation: SpriteWithRotationAnimation) {
+            if (this._animation != null) {
+                this._animation.endAnimation = true;
+            }
+            this._animation = spriteWithRotationAnimation;
+        }
     }   // class SpriteWithRotation
+
+    /**
+     * class SpriteWithRotationAnimator
+     */
+    class SpriteWithRotationAnimation extends animation.SpriteAnimation {
+        private lastFrame: number;
+        private firstFrame: Image = null;
+        private currentFrame: Image = null;
+        public endAnimation: boolean = false;
+
+        constructor(sprite: Sprite, private frames: Image[], private frameInterval: number, loop?: boolean) {
+            super(sprite, loop);
+            this.lastFrame = -1;
+            this.firstFrame = _spritesWithRotations[sprite.id].origImage;
+            //this.registerFrames();
+        }
+
+        private registerFrames() {
+            game.onUpdate(function(): void {
+                this.update();
+            })
+        }
+        
+        public update(): boolean {
+            if (this.endAnimation) {
+                return true;
+            }
+            this.elapsedTime += game.eventContext().deltaTimeMillis;
+            const frameIndex = Math.floor(this.elapsedTime / this.frameInterval);
+            if (this.lastFrame != frameIndex && this.frames.length) {
+                if (!this.loop && frameIndex >= this.frames.length) {
+                    changeImage(this.sprite, this.firstFrame);
+                    return true;
+                }
+                const newImage = this.frames[frameIndex % this.frames.length];
+                if (this.currentFrame !== newImage) {
+                    this.currentFrame = newImage;
+                    changeImage(this.sprite, newImage);
+                }
+            }
+            this.lastFrame = frameIndex;
+            return false;
+        }
+    }
+
+
+
 
     /**
      * Immutable class representing Cartesian coordinates.
@@ -229,6 +296,19 @@ namespace transformSprites {
             thisSprite.scaledImage = image;
             rotateSprite(sprite, thisSprite.rotation);
         }
+    }
+
+    /**
+     * Run an animation on the selected sprite with rotation. 
+     */
+    //% blockId=transform_change_image
+    //% block="set image of %sprite(mySprite) to %image"
+    export function runImageAnimation(sprite: Sprite, frames: Image[], frameinterval: number, loop?: boolean): void {
+        if (!_spritesWithRotations[sprite.id]) {
+            _spritesWithRotations[sprite.id] = new SpriteWithRotation(sprite, 0);
+        } 
+        _spritesWithRotations[sprite.id].animation = new SpriteWithRotationAnimation(sprite, frames, frameinterval, loop);
+        _spritesWithRotations[sprite.id].animation.init();
     }
 
     /**
@@ -454,3 +534,7 @@ namespace transformSprites {
         return toReturn;
     }   // scale3x()
 }   // namespace transformSprites
+
+//TODO - Debug running of first animation
+//TODO - Ensure SpriteWithRotationAnimation stops running when replaced by a new animation
+//TODO - Ensure we're correctly comparing frames in animation despite their rotations.
