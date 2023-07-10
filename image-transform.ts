@@ -111,10 +111,15 @@ namespace transformSprites {
          * @param {Image} - New image associated with the sprite.
          */
         set animation(spriteWithRotationAnimation: SpriteWithRotationAnimation) {
+            let returnImage: Image;
             if (this._animation != null) {
                 this._animation.endAnimation = true;
+                returnImage = this._animation.returnImage;
+            } else {
+                returnImage = this._origImage;
             }
             this._animation = spriteWithRotationAnimation;
+            this._animation.returnImage = returnImage; 
         }
     }   // class SpriteWithRotation
 
@@ -123,23 +128,31 @@ namespace transformSprites {
      */
     class SpriteWithRotationAnimation extends animation.SpriteAnimation {
         private lastFrame: number;
-        private firstFrame: Image = null;
+        private _returnImage: Image = null;
         private currentFrame: Image = null;
         public endAnimation: boolean = false;
 
         constructor(sprite: Sprite, private frames: Image[], private frameInterval: number, loop?: boolean) {
             super(sprite, loop);
             this.lastFrame = -1;
-            this.firstFrame = _spritesWithRotations[sprite.id].origImage;
-            //this.registerFrames();
         }
 
-        private registerFrames() {
-            game.onUpdate(function(): void {
-                this.update();
-            })
+        /**
+         * Returns the sprite's image before animation took place.
+         * @return {Image} - The selected sprite's image before rotation.
+         */
+        get returnImage(): Image {
+            return this._returnImage;
         }
-        
+
+        /**
+         * Sets the image on SpriteWithRotationAnimation to return to once the animation is complete.
+         * @return {Image} - Image to return to once animation is complete.
+         */
+        set returnImage(image: Image) {
+            this._returnImage = image;
+        }
+
         public update(): boolean {
             if (this.endAnimation) {
                 return true;
@@ -148,7 +161,7 @@ namespace transformSprites {
             const frameIndex = Math.floor(this.elapsedTime / this.frameInterval);
             if (this.lastFrame != frameIndex && this.frames.length) {
                 if (!this.loop && frameIndex >= this.frames.length) {
-                    changeImage(this.sprite, this.firstFrame);
+                    changeImage(this.sprite, this.returnImage);
                     return true;
                 }
                 const newImage = this.frames[frameIndex % this.frames.length];
@@ -302,9 +315,7 @@ namespace transformSprites {
      * Run an animation on the selected sprite with rotation. 
      */
     //% blockId= transform_run_image_animation
-    //% block="animate $sprite(mySprite) frames $frames=animation_editor interval (ms) $frameInterval=timePicker loop $loop=toggleOnOff"
-    //% weight=100
-
+    //% block="animate %sprite(mySprite) frames %Image[](frames) interval (ms) %number(500) loop %boolean"
     export function runImageAnimation(sprite: Sprite, frames: Image[], frameinterval: number, loop?: boolean): void {
         if (!_spritesWithRotations[sprite.id]) {
             _spritesWithRotations[sprite.id] = new SpriteWithRotation(sprite, 0);
