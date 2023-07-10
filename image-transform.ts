@@ -301,8 +301,11 @@ namespace transformSprites {
     /**
      * Run an animation on the selected sprite with rotation. 
      */
-    //% blockId=transform_change_image
-    //% block="set image of %sprite(mySprite) to %image"
+    //% blockId= transform_run_image_animation
+    //% block="animate $sprite=variables_get(mySprite) frames $frames=animation_editor interval (ms) $frameInterval=timePicker loop $loop=toggleOnOff"
+    //% group="Animate"
+    //% weight=100
+
     export function runImageAnimation(sprite: Sprite, frames: Image[], frameinterval: number, loop?: boolean): void {
         if (!_spritesWithRotations[sprite.id]) {
             _spritesWithRotations[sprite.id] = new SpriteWithRotation(sprite, 0);
