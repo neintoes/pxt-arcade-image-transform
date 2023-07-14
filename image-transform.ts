@@ -315,7 +315,7 @@ namespace transformSprites {
      * Run an animation on the selected sprite with rotation. 
      */
     //% blockId= transform_run_image_animation
-    //% block="animate %sprite(mySprite) frames %[Image](frames) interval (ms) %number(500) loop %boolean"
+    //% block="animate %sprite(mySprite) %frames interval (ms) %frameInterval(500) loop %loop"
     export function runImageAnimation(sprite: Sprite, frames: Image[], frameinterval: number, loop?: boolean): void {
         if (!_spritesWithRotations[sprite.id]) {
             _spritesWithRotations[sprite.id] = new SpriteWithRotation(sprite, 0);
