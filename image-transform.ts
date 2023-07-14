@@ -301,7 +301,7 @@ namespace transformSprites {
      * Change the current image transformSprites associates with the sprite.
      */
     //% blockId=transform_change_image
-    //% block="set image of %sprite(mySprite) to %image"
+    //% block="set image of %sprite(mySprite) to %image=screen_image_picker"
     export function changeImage(sprite: Sprite, image: Image): void {
         let thisSprite = _spritesWithRotations[sprite.id];
         if (thisSprite) {
