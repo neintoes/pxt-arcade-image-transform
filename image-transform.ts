@@ -304,6 +304,9 @@ namespace transformSprites {
     //% block="set image of %sprite(mySprite) to %image=screen_image_picker"
     //% sprite.shadow=variables_get
     export function changeImage(sprite: Sprite, image: Image): void {
+        if (!_spritesWithRotations[sprite.id]) {
+            _spritesWithRotations[sprite.id] = new SpriteWithRotation(sprite, 0);
+        }
         let thisSprite = _spritesWithRotations[sprite.id];
         if (thisSprite) {
             thisSprite.origImage = image;
@@ -590,6 +593,4 @@ namespace transformSprites {
     }   // scale3x()
 }   // namespace transformSprites
 
-//TODO - Change image in the extension will not work if the sprite has not already been rotated.
-//TODO - RunImageAnimation will return to the image of the sprite at SpriteWithRotation's instantiation.
-//Second issue does not occur if the sprite has already been rotated at animation play.
+//TODO - Stop Image animation.
