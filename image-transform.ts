@@ -590,6 +590,6 @@ namespace transformSprites {
     }   // scale3x()
 }   // namespace transformSprites
 
-//TODO - Debug running of first animation
-//TODO - Ensure SpriteWithRotationAnimation stops running when replaced by a new animation
-//TODO - Ensure we're correctly comparing frames in animation despite their rotations.
+//TODO - Change image in the extension will not work if the sprite has not already been rotated.
+//TODO - RunImageAnimation will return to the image of the sprite at SpriteWithRotation's instantiation.
+//Second issue does not occur if the sprite has already been rotated at animation play.
