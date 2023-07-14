@@ -302,6 +302,7 @@ namespace transformSprites {
      */
     //% blockId=transform_change_image
     //% block="set image of %sprite(mySprite) to %image=screen_image_picker"
+    //% sprite.shadow=variables_get
     export function changeImage(sprite: Sprite, image: Image): void {
         let thisSprite = _spritesWithRotations[sprite.id];
         if (thisSprite) {
