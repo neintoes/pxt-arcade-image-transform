@@ -316,6 +316,12 @@ namespace transformSprites {
      */
     //% blockId= transform_run_image_animation
     //% block="animate %sprite(mySprite) %frames interval (ms) %frameInterval(500) loop %loop"
+        //% sprite.defl=mySprite
+    //% sprite.shadow=variables_get
+    //% frames.shadow=animation_editor
+    //% frameInterval.shadow=timePicker
+    //% weight=100
+    //% blockGap=8
     export function runImageAnimation(sprite: Sprite, frames: Image[], frameinterval: number, loop?: boolean): void {
         if (!_spritesWithRotations[sprite.id]) {
             _spritesWithRotations[sprite.id] = new SpriteWithRotation(sprite, 0);
