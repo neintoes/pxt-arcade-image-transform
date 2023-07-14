@@ -315,7 +315,7 @@ namespace transformSprites {
      * Run an animation on the selected sprite with rotation. 
      */
     //% blockId= transform_run_image_animation
-    //% block="animate %sprite(mySprite) frames %Image[](frames) interval (ms) %number(500) loop %boolean"
+    //% block="animate %sprite(mySprite) frames %[Image](frames) interval (ms) %number(500) loop %boolean"
     export function runImageAnimation(sprite: Sprite, frames: Image[], frameinterval: number, loop?: boolean): void {
         if (!_spritesWithRotations[sprite.id]) {
             _spritesWithRotations[sprite.id] = new SpriteWithRotation(sprite, 0);
@@ -323,6 +323,41 @@ namespace transformSprites {
         _spritesWithRotations[sprite.id].animation = new SpriteWithRotationAnimation(sprite, frames, frameinterval, loop);
         _spritesWithRotations[sprite.id].animation.init();
     }
+
+    /**
+     * Stop one type or all animations (simple and looping) on a sprite
+     * @param type the animation type to stop
+     * @param sprite the sprite to filter animations by
+     */
+    //% blockId=stop_animations
+    //% block="stop %type animations on %sprite=variables_get(mySprite)"
+    //% group="Animate"
+    //% weight=60
+    //% help=animation/stop-animation
+    // export function stopAnimation(type: AnimationTypes, sprite: Sprite) {
+    //     let state: AnimationState = game.currentScene().data[stateNamespace];
+    //     if (state && state.animations) {
+    //         state.animations = state.animations.filter((anim: SpriteAnimation) => {
+    //             if (anim.sprite === sprite) {
+    //                 switch (type) {
+    //                     case AnimationTypes.ImageAnimation:
+    //                         if (anim instanceof ImageAnimation) return false;
+    //                         break;
+    //                     case AnimationTypes.MovementAnimation:
+    //                         if (anim instanceof MovementAnimation) return false;
+    //                         break;
+    //                     case AnimationTypes.All:
+    //                         return false;
+    //                 }
+    //             }
+    //             return true;
+    //         });
+    //     }
+    //     if (type == AnimationTypes.All || type == AnimationTypes.ImageAnimation) {
+    //         //stop state based animation if any as well
+    //         sprite._action = -1
+    //     }
+    // }
 
     /**
      * Rotate a sprite to a specific angle.
